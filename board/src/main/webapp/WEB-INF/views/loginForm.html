@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramos의 NHN Board - Login</title>
+</head>
+<body>
+<h1>로그인 페이지</h1>
+<form method="post" action="/login">
+    <span th:text="'아이디 : '"></span><input type="text" name="username" /><br />
+    <span th:text="'패스워드 : '"></span><input type="password" name="password" /><br />
+    <br />
+    <input type="submit" />
+</form>
+</body>
+</html>

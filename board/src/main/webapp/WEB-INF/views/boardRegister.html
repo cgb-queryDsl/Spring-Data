@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramos의 NHN Board - 게시글 등록</title>
+</head>
+<body>
+<h1>게시글 등록</h1>
+<form method="post" action="/boards" th:object="${request}" enctype="multipart/form-data">
+    <span th:text="'제목 : '"></span><input type="text" name="title" /><br />
+    <span th:text="'본문 : '"></span><textarea name="content" rows="10" cols="80"></textarea><br />
+    <span th:text="'작성자 : '"></span><input type="text" name="writer" th:value="${#session.getAttribute('USERNAME')}" readonly /><br />
+    <span>파일</span><input type="file" multiple="multiple" name="uploadFiles" accept="*/*"/>
+    <br />
+    <input type="submit" />
+</form>
+</body>
+</html>

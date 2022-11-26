@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramos의 NHN Board - 게시글 수정</title>
+</head>
+<body>
+<h1>게시글 수정</h1>
+<form method="post" th:action="@{/boards/{id}/edit(id=${board.boardId})}">
+    <input type="hidden" name="_method" value="put">
+    제목 : </span><input type="text" name="title" th:value="${board.title}" /><br />
+    본문 : </span><textarea name="content" rows="10" cols="80" th:value="${board.content}" ></textarea><br />
+    수정자 : </span><input type="text" name="editorName" th:value="${#session.getAttribute('USERNAME')}" readonly /><br />
+    <br />
+    <input type="submit" />
+</form>
+</body>
+</html>

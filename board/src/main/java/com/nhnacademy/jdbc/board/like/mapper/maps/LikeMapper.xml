@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nhnacademy.jdbc.board.like.mapper.LikeMapper">
+    <select id="findAll" resultType="com.nhnacademy.jdbc.board.board.dto.BoardResponseDto">
+        select b.boardId, b.title, b.content, u.username, b.editorName, b.createdAt, b.updatedAt, b.commentCount
+        from Board_Likes as bl
+            inner join Boards as b on b.boardId = bl.boardId
+            inner join Users as u on u.userId = bl.userId
+        where bl.userId=#{userId}
+    </select>
+
+    <insert id="like">
+        insert into Board_Likes(userId, boardId) values (#{userId}, #{boardId})
+    </insert>
+
+    <delete id="unlike">
+        delete from Board_Likes
+        where boardId=#{boardId} and userId=#{userId}
+    </delete>
+</mapper>

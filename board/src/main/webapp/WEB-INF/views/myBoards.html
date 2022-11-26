@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramos의 NHN Board - 좋아한 게시글 목록</title>
+</head>
+<body>
+<h1>내가 좋아한 게시글 목록</h1>
+<table>
+    <tr>
+        <th th:text="번호"></th>
+        <th th:text="제목"></th>
+        <th th:text="작성자"></th>
+        <th th:text="수정자"></th>
+        <th th:text="작성일"></th>
+        <th th:text="수정일"></th>
+        <th th:text="댓글개수"></th>
+        <th></th>
+    </tr>
+    <tr th:each="board : ${boards}">
+        <td th:text="${board.boardId}"></td>
+        <td th:text="${board.title}"></td>
+        <td th:text="${board.username}"></td>
+        <td th:text="${board.editorName}"></td>
+        <td th:text="${board.createdAt}"></td>
+        <td th:text="${board.updatedAt}"></td>
+        <td th:text="${board.commentCount}"></td>
+        <td th:text="상세보기" th:onclick="|location.href='@{/boards/{id}(id=${board.boardId})}'|"></td>
+    </tr>
+</table>
+<br />
+<a href="/">홈으로</a>
+</body>
+</html>

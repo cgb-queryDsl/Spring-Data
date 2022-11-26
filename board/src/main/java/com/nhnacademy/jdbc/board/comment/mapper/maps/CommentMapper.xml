@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nhnacademy.jdbc.board.comment.mapper.CommentMapper">
+    <select id="selectComments" resultType="com.nhnacademy.jdbc.board.comment.dto.CommentResponseDto">
+        select c.commentId, c.commenter, c.text, c.createdAt, c.updatedAt, c.boardId
+        from Comments as c
+        where c.boardId = #{boardId}
+    </select>
+
+    <insert id="insertComment" parameterType="com.nhnacademy.jdbc.board.comment.domain.Comment">
+        insert into Comments(boardId, commenter, text, createdAt, updatedAt)
+        values (#{boardId}, #{commenter}, #{text}, now(), now())
+        <selectKey keyProperty="commentId" resultType="long">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateComment" parameterType="com.nhnacademy.jdbc.board.comment.domain.Comment">
+        update Comments set text=#{text}, updatedAt=now()
+        where commentId= #{commentId}
+    </update>
+
+    <delete id="deleteById">
+        delete from Comments
+        where commentId=#{id}
+    </delete>
+
+    <select id="getBoardId" resultType="long">
+        select boardId
+        from Comments
+        where commentId = #{commentId}
+    </select>
+</mapper>

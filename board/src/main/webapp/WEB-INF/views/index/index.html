@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramos의 NHN Board</title>
+</head>
+<body>
+<h1>Ramos의 NHN Board에 오신 것을 환영합니다.</h1>
+<form method="get">
+    제목으로 검색 : <input type="text" name="title" />
+    <br />
+    <input type="submit" />
+</form>
+<br />
+<table>
+    <tr>
+        <th th:text="번호"></th>
+        <th th:text="제목"></th>
+        <th th:text="작성자"></th>
+        <th th:text="수정자"></th>
+        <th th:text="작성일"></th>
+        <th th:text="수정일"></th>
+        <th th:text="댓글개수"></th>
+        <th></th>
+    </tr>
+    <tr th:each="board : ${boards.content}">
+        <td th:text="${board.boardId}"></td>
+        <td th:text="${board.title}"></td>
+        <td th:text="${board.username}"></td>
+        <td th:text="${board.editorName}"></td>
+        <td th:text="${board.createdAt}"></td>
+        <td th:text="${board.updatedAt}"></td>
+        <td th:text="${board.commentCount}"></td>
+        <td th:text="상세보기" th:onclick="|location.href='@{/boards/{id}(id=${board.boardId})}'|"></td>
+    </tr>
+</table>
+<br />
+
+<div th:if="${session.get('USERNAME') == null}">
+    <form action="/login" method="get">
+        <button type="submit">로그인</button>
+    </form>
+</div>
+<div th:if="${session.get('USERNAME') != null}">
+    <form th:action="@{/likes/{username}(username=${session.get('USERNAME')})}" method="get">
+        <button type="submit">내가 좋아한 게시글 목록</button>
+    </form>
+    <form action="/logout" method="get">
+        <button type="submit">로그아웃</button>
+    </form>
+</div>
+<br />
+<form action="/boards" method="get">
+    <button type="submit">게시글 등록하기</button>
+</form>
+
+<div th:if="${boards.totalCount > 0}" th:with="totalPages = ${totalPages}" class="pagination">
+    <a th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:href="@{/(page=${pageNumber})}" th:text="${pageNumber} + ' '"></a>
+</div>
+</body>
+</html>

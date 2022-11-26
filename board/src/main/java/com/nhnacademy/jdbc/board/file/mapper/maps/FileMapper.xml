@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nhnacademy.jdbc.board.file.mapper.FileMapper">
+    <select id="selectFiles" resultType="string">
+        select filename
+        from Files as f
+        where f.boardId=#{boardId}
+    </select>
+
+    <insert id="insertFile">
+        insert into Files(boardId, filename)
+        values
+        <foreach collection="fileNames" item="filename" separator=",">
+            (LAST_INSERT_ID(), #{filename})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramos의 NHN Board - 게시글 상세 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<h1>게시글 상세 페이지</h1>
+게시글 번호: <span th:text="${board.boardId}"></span><br/>
+제목: <span th:text="${board.title}"></span><br/>
+작성자: <span th:text="${board.username}"></span><br/>
+최종 수정자: <span th:text="${board.editorName}"></span><br/>
+<h4>본문</h4>
+<span th:text="${board.content}"></span><br/>
+작성일: <span th:text="${board.createdAt}"></span>
+수정일: <span th:text="${board.updatedAt}"></span><br/>
+댓글 수: <span th:text="${board.commentCount}"></span><br/>
+
+<div th:if="${session.get('USERNAME')} == ${board.username} or ${session.get('SESSION') == 'ROLE_ADMIN'}">
+    <form th:action="@{/boards/{id}/edit(id=${board.boardId})}" method="get">
+        <button type="submit">수정하기</button>
+    </form>
+    <form th:action="@{/boards/{id}(id=${board.boardId})}" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit">삭제</button>
+    </form>
+</div>
+<div th:if="${session.get('SESSION') == 'ROLE_ADMIN'}">
+    <form th:action="@{/boards/{id}/restore(id=${board.boardId})}" method="post">
+        <input type="hidden" name="_method" value="put">
+        <button type="submit">복원</button>
+    </form>
+</div>
+
+
+<form th:action="@{/likes/{boardId}/{username}(boardId=${board.boardId}, username=${session.get('USERNAME')})}" method="post">
+    <button type="submit">좋아요</button>
+</form>
+<form th:action="@{/likes/{boardId}/{username}(boardId=${board.boardId}, username=${session.get('USERNAME')})}" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button type="submit">좋아요 취소</button>
+</form>
+
+<h4>첨부 파일 목록</h4>
+<span th:each="file : ${board.Files}">
+    <a th:href="@{/boards/download/{file}(file=${file})}"
+       th:text="${file}"
+    />
+</span>
+<br/>
+
+<button type="button" class="listBtn" onclick="getComments()">댓글 목록</button>
+<br/>
+<button type="button" class="addComment" onclick="commentRegister()">댓글 등록</button>
+<div>
+    <div class="list-group commentList">
+
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="text" placeholder="Comment Text...">
+                    <input class="form-control" type="text" name="commenter" th:placeholder="${session.get('USERNAME')}"
+                           th:value="${#session.getAttribute('USERNAME')}">
+                    <input type="hidden" name="commentId">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="commentModify" onclick="modify()">수정</button>
+                <button type="button" class="commentSave" onclick="save()">등록</button>
+                <button type="button" class="commentClose" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script th:inline="javascript">
+    function formatTime(str) {
+        let format = '';
+        for (let i = 0; i < 3; i++) {
+            format += str[i] + '/';
+        }
+        format += ' ';
+        for (let i = 3; i < 6; i++) {
+            format += str[i] + ':';
+        }
+
+        let date = new Date(format);
+
+        return date.getFullYear() + '/' +
+            (date.getMonth() + 1) + '/' +
+            date.getDate() + ' ' +
+            date.getHours() + ':' +
+            date.getMinutes();
+    }
+
+    function getComments() {
+        const boardId = [[${board.boardId}]];
+        const listGroup = $(".commentList");
+
+        $(".listBtn").click(function () {
+            $.getJSON('/comments/all/' + boardId, function (arr) {
+                console.log(arr);
+
+                let str = "";
+
+                $.each(arr, function (index, comment) {
+                    console.log(comment);
+                    str += '    <div class="card-body" data-cno="' + comment.commentId + '">댓글 번호: <b>' + comment.commentId + '</b>';
+                    str += '    <h5 class="card-title">댓글 내용: ' + comment.text + '</h5>';
+                    str += '    <h6 class="card-subtitle mb-2 text-muted">작성자: ' + comment.commenter + '</h6>';
+                    str += '    <p class="card-text">작성일: ' + formatTime(comment.createdAt) + '</p>';
+                    str += '    <p class="card-text">수정일: ' + formatTime(comment.updatedAt) + '</p>';
+                    str += '    <button class="deleteCommentBtn" type="button" onclick="deleteComment(' + comment.commentId + ')">삭제</input>'
+                    str += '    <button type="button" class="modifyComment" onclick="modifyComment(' + comment.commentId + ')">수정</button>'
+                    str += '    </div>';
+                })
+
+                listGroup.html(str);
+            })
+        })
+    };
+
+    function modifyComment(commentId) {
+        let modal = $('.modal');
+
+        modal.modal('show');
+
+        $('input[name="text"]').val('');
+        $('input[name="commenter"]').val('');
+        $('input[name="commentId"]').val(commentId);
+
+        $(".modal-footer .btn").hide();
+        $(".commentSave, .commentClose").show();
+    }
+
+    function commentRegister() {
+        let modal = $('.modal');
+
+        modal.modal('show');
+
+        $('input[name="text"]').val('');
+        $('input[name="commenter"]').val('');
+
+        $(".modal-footer .btn").hide();
+        $(".commentSave, .commentClose").show();
+    }
+
+    function save() {
+        let modal = $('.modal');
+        const boardId = [[${board.boardId}]];
+        let comment = {
+            text: $('input[name="text"]').val(),
+            commenter: $('input[name="commenter"]').val()
+        }
+        $.ajax({
+            url: '/comments/' + boardId,
+            method: 'post',
+            data: JSON.stringify(comment),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json'
+        }).done(function (data) {
+            alert("댓글이 등록되었습니다.");
+            modal.modal('hide');
+            getComments();
+        }).fail(function (data) {
+            console.log(data.responseJSON);
+            alert('입력값들은 공백일 수 없습니다.');
+        });
+    }
+
+    function modify() {
+        let modal = $('.modal');
+        let commentId = $('input[name="commentId"]').val();
+        let comment = {
+            text: $('input[name="text"]').val(),
+            commenter: $('input[name="commenter"]').val()
+        }
+        $.ajax({
+            url: '/comments/' + commentId,
+            method: 'put',
+            data: JSON.stringify(comment),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (result) {
+                if (result === 'success') {
+                    alert("댓글이 수정되었습니다.");
+                    modal.modal('hide');
+                    getComments();
+                } else {
+                    console.log(result.responseJSON);
+                    alert('입력값들은 공백일 수 없습니다.');
+                }
+            }
+        })
+    }
+
+    function closeModal() {
+        let modal = $('.modal');
+        modal.modal('hide');
+    }
+
+    function deleteComment(commentId) {
+        $.ajax({
+            url: '/comments/' + commentId,
+            method: 'delete',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json'
+        })
+        alert("댓글이 삭제되었습니다.");
+        getComments();
+    }
+</script>
+</html>
