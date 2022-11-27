@@ -22,24 +22,40 @@ public class IndexController {
     public String index(@RequestParam(value = "page", required = false) Long page,
                         @RequestParam(value = "title", required = false) String title,
                         ModelMap modelMap) {
-        long idx = 1;
-        if (!Objects.isNull(page) && page >= 1) {
-            idx = page;
-        }
+        long pageNum = getPageNum(page);
 
-        String query = "";
-        if (!Objects.isNull(title)) {
-            query = title;
-        }
+        String inputTitleQuery = getInputTitleQuery(title);
 
-        Page<BoardResponseDto> boards = boardService.findAll(idx, query);
-        long totalCount = boards.getTotalCount();
-        int pageSize = 20;
-        int totalPages = (totalCount == 0) ? 1 : (int) Math.ceil((double) totalCount / (double) pageSize);
+        Page<BoardResponseDto> boards = boardService.findAll(pageNum, inputTitleQuery);
+        int totalPages = getTotalPages(boards);
 
         modelMap.addAttribute("boards", boards);
         modelMap.addAttribute("totalPages", totalPages);
 
         return "index/index";
+    }
+
+    private int getTotalPages(Page<BoardResponseDto> boards) {
+        long totalCount = boards.getTotalCount();
+        int pageSize = 20;
+        return (totalCount == 0) ? 1 : (int) Math.ceil((double) totalCount / (double) pageSize);
+    }
+
+    private String getInputTitleQuery(String title) {
+        String query = "";
+        if (!Objects.isNull(title)) {
+            log.info("InputTitleQueryParameter={}", title);
+            query = title;
+        }
+        return query;
+    }
+
+    private long getPageNum(Long page) {
+        long pageNum = 1;
+        if (!Objects.isNull(page) && page >= 1) {
+            log.info("InputPageQueryParameter={}", page);
+            pageNum = page;
+        }
+        return pageNum;
     }
 }

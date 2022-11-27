@@ -31,11 +31,12 @@ public class CommentController {
     public ResponseEntity<Object> commentRegister(@PathVariable Long boardId,
                                                 @Valid @RequestBody CommentRequest request,
                                                 BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        log.info("CommentRegister inputText={}", request.getText());
+        log.info("CommentRegister inputCommenter={}", request.getCommenter());
+
+        if (checkValidation(bindingResult)) {
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        log.info(request.getText());
-        log.info(request.getCommenter());
 
         return ResponseEntity.ok(commentService.register(boardId, request));
     }
@@ -44,12 +45,19 @@ public class CommentController {
     public ResponseEntity<Object> commentEdit(@PathVariable long commentId,
                                               @Valid @RequestBody CommentRequest request,
                                               BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        log.info("CommentEdit inputText={}", request.getText());
+        log.info("CommentEdit inputCommenter={}", request.getCommenter());
+
+        if (checkValidation(bindingResult)) {
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
 
         commentService.edit(commentId, request);
         return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    private boolean checkValidation(BindingResult bindingResult) {
+        return bindingResult.hasErrors();
     }
 
     @DeleteMapping("/{commentId}")

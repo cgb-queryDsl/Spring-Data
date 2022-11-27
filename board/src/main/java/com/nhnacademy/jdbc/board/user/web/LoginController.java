@@ -1,5 +1,6 @@
 package com.nhnacademy.jdbc.board.user.web;
 
+import com.nhnacademy.jdbc.board.exception.UserNotFoundException;
 import com.nhnacademy.jdbc.board.exception.ValidationFailedException;
 import com.nhnacademy.jdbc.board.user.dto.LoginRequest;
 import com.nhnacademy.jdbc.board.user.domain.User;
@@ -49,23 +50,30 @@ public class LoginController {
                           BindingResult bindingResult,
                           HttpSession session,
                           ModelMap modelMap) {
-        if (bindingResult.hasErrors()) {
-            throw new ValidationFailedException(bindingResult);
-        }
-
-        Optional<User> optionalUser = userService.getUser(request.getUsername(), request.getPassword());
-
-        if (!optionalUser.isPresent()) {
-            throw new RuntimeException("user not found");
-        }
-
-        User user = optionalUser.get();
+        User user = getUser(request, bindingResult);
         session.setAttribute(SESSION, user.getUserRole().toString());
         session.setAttribute(USERNAME, user.getUsername());
 
         modelMap.put("id", session);
 
         return "redirect:/";
+    }
+
+    private User getUser(LoginRequest request, BindingResult bindingResult) {
+        log.info("로그인 input username={}", request.getUsername());
+        log.info("로그인 input password={}", request.getPassword());
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
+        Optional<User> optionalUser = userService.getUser(request.getUsername(), request.getPassword());
+
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException("user not found");
+        }
+
+        return optionalUser.get();
     }
 
     @GetMapping("/logout")

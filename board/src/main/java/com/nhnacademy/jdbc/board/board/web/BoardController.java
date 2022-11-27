@@ -40,13 +40,11 @@ public class BoardController {
     public String boardRegister(@Valid @ModelAttribute BoardRegisterRequest request,
                                 BindingResult bindingResult,
                                 @Value("${upload.dir}") String uploadDir) throws IOException {
-        if (bindingResult.hasErrors()) {
-            throw new ValidationFailedException(bindingResult);
-        }
+        log.info("BoardRegisterRequest input title={}", request.getTitle());
+        log.info("BoardRegisterRequest input content={}", request.getContent());
+        log.info("BoardRegisterRequest input writerName={}", request.getWriter());
 
-        log.info("title={}", request.getTitle());
-        log.info("content={}", request.getContent());
-        log.info("writerName={}", request.getWriter());
+        checkValidation(bindingResult);
 
         boardService.registerBoard(request, uploadDir);
 
@@ -71,13 +69,21 @@ public class BoardController {
 
     @PutMapping("/{boardId}/edit")
     public String editBoard(@PathVariable long boardId, @Valid @ModelAttribute BoardEditRequest request, BindingResult bindingResult) {
+        log.info("BoardEditRequest input boardId={}", boardId);
+        log.info("BoardEditRequest input title={}", request.getTitle());
+        log.info("BoardEditRequest input content={}", request.getContent());
+        log.info("BoardEditRequest input editorName={}", request.getEditorName());
+
+        checkValidation(bindingResult);
+
+        boardService.edit(boardId, request);
+        return "redirect:/";
+    }
+
+    private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
-
-        log.info("boardId={}", boardId);
-        boardService.edit(boardId, request);
-        return "redirect:/";
     }
 
     @DeleteMapping("/{boardId}")

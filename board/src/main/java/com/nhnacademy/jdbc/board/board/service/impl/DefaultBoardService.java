@@ -6,6 +6,7 @@ import com.nhnacademy.jdbc.board.board.dto.BoardRegisterRequest;
 import com.nhnacademy.jdbc.board.board.dto.BoardResponseDto;
 import com.nhnacademy.jdbc.board.board.mapper.BoardMapper;
 import com.nhnacademy.jdbc.board.board.service.BoardService;
+import com.nhnacademy.jdbc.board.exception.BoardNotFoundException;
 import com.nhnacademy.jdbc.board.file.service.FileService;
 import com.nhnacademy.jdbc.board.user.domain.User;
 import com.nhnacademy.jdbc.board.user.service.UserService;
@@ -44,7 +45,7 @@ public class DefaultBoardService implements BoardService {
         Optional<BoardResponseDto> boardDto = boardMapper.selectBoard(boardId);
 
         if (boardDto.isEmpty()) {
-            throw new RuntimeException("board not found");
+            throw new BoardNotFoundException("board not found");
         }
 
         List<String> downloadFiles = fileService.downloadFiles(boardId);
@@ -61,7 +62,7 @@ public class DefaultBoardService implements BoardService {
         Optional<User> optionalUser = userService.findByUsername(request.getWriter());
 
         if (optionalUser.isEmpty()) {
-            throw new RuntimeException("user not found");
+            throw new BoardNotFoundException("user not found");
         }
         User user = optionalUser.get();
 

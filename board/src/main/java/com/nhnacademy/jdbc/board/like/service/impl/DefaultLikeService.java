@@ -1,6 +1,7 @@
 package com.nhnacademy.jdbc.board.like.service.impl;
 
 import com.nhnacademy.jdbc.board.board.dto.BoardResponseDto;
+import com.nhnacademy.jdbc.board.exception.UserNotFoundException;
 import com.nhnacademy.jdbc.board.like.mapper.LikeMapper;
 import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.user.domain.User;
@@ -20,31 +21,27 @@ public class DefaultLikeService implements LikeService {
 
     @Override
     public List<BoardResponseDto> findByUsername(String username) {
-        Optional<User> optionalUser = userMapper.findByUsername(username);
-        if (optionalUser.isEmpty()) {
-            throw new RuntimeException("유저 없음");
-        }
-        long userId = optionalUser.get().getId();
+        long userId = getUserId(username);
         return likeMapper.findAll(userId);
     }
 
     @Override
     public void like(long boardId, String username) {
-        Optional<User> optionalUser = userMapper.findByUsername(username);
-        if (optionalUser.isEmpty()) {
-            throw new RuntimeException("유저 없음");
-        }
-        long userId = optionalUser.get().getId();
+        long userId = getUserId(username);
         likeMapper.like(userId, boardId);
     }
 
     @Override
     public void unlike(long boardId, String username) {
+        long userId = getUserId(username);
+        likeMapper.unlike(userId, boardId);
+    }
+
+    private long getUserId(String username) {
         Optional<User> optionalUser = userMapper.findByUsername(username);
         if (optionalUser.isEmpty()) {
-            throw new RuntimeException("유저 없음");
+            throw new UserNotFoundException("user not found");
         }
-        long userId = optionalUser.get().getId();
-        likeMapper.unlike(userId, boardId);
+        return optionalUser.get().getId();
     }
 }
