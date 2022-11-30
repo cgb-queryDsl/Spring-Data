@@ -1,0 +1,21 @@
+### 조회
+
+GET /user
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080
+
+{
+  "username": "admin",
+  "password": "12345"
+}
+
+###
+
+GET /user
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080
+
+{
+  "username": "user",
+  "password": "12345"
+}

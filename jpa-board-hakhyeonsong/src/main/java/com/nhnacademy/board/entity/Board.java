@@ -37,7 +37,10 @@ public class Board {
     @Column(name = "comment_count")
     private Integer commentCount;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(name = "deleted")
+    private boolean deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }

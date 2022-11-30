@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.nhnacademy.board.UserRole.ROLE_ADMIN;
-import static com.nhnacademy.board.UserRole.ROLE_USER;
+import static com.nhnacademy.board.entity.UserRole.ROLE_ADMIN;
+import static com.nhnacademy.board.entity.UserRole.ROLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)

@@ -1,0 +1,29 @@
+### 단건 조회
+
+GET /boards/1
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080
+
+### 전체 조회 (with 페이징)
+
+GET /boards?page=0&size=20
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080
+
+### 제목 일부로 검색
+
+GET /boards/query?title=게시
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080
+
+### 삭제
+
+DELETE /boards/1
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080
+
+### 복원
+
+PUT /boards/1/restore
+Content-Type: application/json;charset=utf-8
+Host: localhost:8080

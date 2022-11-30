@@ -7,15 +7,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-public interface BoardRepository extends JpaRepository<Board, Integer> {
+public interface BoardRepository extends JpaRepository<Board, Integer>, BoardRepositoryCustom {
 
     @Transactional
     @Modifying
     @Query("update Board b set b.commentCount = :amount where b.boardId = :boardId")
     void updateBoard(@Param("boardId") Integer boardId, @Param("amount") Integer amount);
 
-    @Query("select b from Board b where b.title like %:title%")
-    List<Board> findAllByTitleLike(@Param("title") String title);
+    @Transactional
+    @Modifying
+    @Query("update Board b set b.deleted = true where b.boardId = :boardId")
+    void deleteBoard(@Param("boardId") Integer boardId);
+
+    @Transactional
+    @Modifying
+    @Query("update Board b set b.deleted = false where b.boardId = :boardId")
+    void restoreBoard(@Param("boardId") Integer boardId);
 }
