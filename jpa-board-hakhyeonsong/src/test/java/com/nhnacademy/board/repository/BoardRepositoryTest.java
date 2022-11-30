@@ -13,6 +13,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -41,5 +43,23 @@ class BoardRepositoryTest {
         Board board = boardRepository.findById(boardId).get();
 
         assertThat(board.getCommentCount()).isEqualTo(commentUpdateAmount);
+    }
+
+    @Test
+    @DisplayName("게시글 제목으로 검색 성공")
+    void findAllByTitleLike_success() throws Exception {
+        //given
+        String title = "게시";
+
+        //when
+        List<Board> boards = boardRepository.findAllByTitleLike(title);
+
+        //then
+        Board board = boards.get(0);
+
+        assertThat(board.getTitle()).isEqualTo("게시글1");
+        assertThat(board.getContent()).isEqualTo("게시글 내용");
+        assertThat(board.getCommentCount()).isZero();
+        assertThat(board.getEditorName()).isEqualTo("admin");
     }
 }
