@@ -1,0 +1,72 @@
+### 세대 등록: POST /household
+
+POST /household HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+{
+    "householdResidentSerialNumber": 7,
+    "householdSerialNumber": 2,
+    "householdCompositionReasonCode": "세대분리",
+    "currentHouseMovementAddress": "달나라",
+    "reportDate": "2022-11-21T20:37:11",
+    "lastAddressYn": "Y",
+    "householdRelationshipCode": "본인",
+    "householdCompositionChangeReasonCode": "세대분리"
+}
+
+### 세대 삭제: DELETE /household/{householdSerialNumber}
+
+DELETE /household/2 HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+### 세대 구성원 등록: POST /houshold/{householdSerialNumber}/member
+
+POST /household/2/member HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+{
+  "householdResidentSerialNumber": 3,
+  "householdCompositionReasonCode": "전입",
+  "reportDate": "2022-11-21T20:37:11",
+  "householdRelationshipCode": "자녀",
+  "householdCompositionChangeReasonCode": "전입"
+}
+
+### 세대 구성원 삭제: DELETE /houshold/{householdSerialNumber}/member/{householdResidentSerialNumber}
+
+DELETE /household/2/member/3 HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+### 세대 전입 주소 등록: POST /household/{householdSerialNumber}/movement
+
+POST /household/2/movement
+host: localhost:8080
+Content-Type: application/json
+
+{
+  "houseMovementReportDate": "2023-01-01T00:00:00",
+  "houseMovementAddress": "안드로메다2",
+  "lastAddressYn": "Y"
+}
+
+### 세대 전입 주소 수정: PUT /household/{householdSerialNumber}/movement/{reportDate}
+
+PUT /household/2/movement/20230101
+host: localhost:8080
+Content-Type: application/json
+
+{
+  "houseMovementAddress": "블랙홀",
+  "lastAddressYn": "N"
+}
+
+### 세대 전입 주소 삭제: DELETE /household/{householdSerialNumber}/movement/{reportDate}
+### reportDate: YYYYMMDD 형태
+
+DELETE /household/2/movement/20230101
+host: localhost:8080
+Content-Type: application/json

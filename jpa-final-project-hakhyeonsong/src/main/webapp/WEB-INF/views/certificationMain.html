@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주민관리 서비스 - By Ramos</title>
+</head>
+<body>
+<h1>주민 관리 서비스 증명서 선택 페이지</h1>
+<a th:href="@{/certificate/{serialNumber}/family(serialNumber=${resident.residentSerialNumber})}">가족관계증명서</a><br />
+<a th:href="@{/certificate/{serialNumber}/household(serialNumber=${resident.residentSerialNumber})}">주민등록등본</a><br />
+<a th:if="${resident.birthDate != null}" th:href="@{/certificate/{serialNumber}/birth(serialNumber=${resident.residentSerialNumber})}">출생신고서</a><br />
+<a th:if="${resident.deathDate != null}" th:href="@{/certificate/{serialNumber}/death(serialNumber=${resident.residentSerialNumber})}">사망신고서</a><br />
+<a th:href="@{/certificate/{serialNumber}/issue(serialNumber=${resident.residentSerialNumber})}">증명서 발급목록</a><br />
+</body>
+</html>

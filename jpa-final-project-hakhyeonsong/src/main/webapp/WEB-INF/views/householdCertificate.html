@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주민관리 서비스 - By Ramos</title>
+</head>
+<body>
+<h1>주민등록등본</h1>
+<table>
+    <tr>
+        <th th:text="구분"></th>
+        <th th:text="성명"></th>
+        <th th:text="출생연월일"></th>
+        <th th:text="주민등록번호"></th>
+        <th th:text="성별"></th>
+    </tr>
+    <tr>
+        <td th:text="본인"></td>
+        <td th:text="${resident.name}"></td>
+        <td th:text="${resident.birthDate}"></td>
+        <td th:text="${resident.residentRegistrationNumber}"></td>
+        <td th:text="${resident.genderCode}"></td>
+    </tr>
+</table>
+<br />
+<table>
+    <tr>
+        <th th:text="주소"></th>
+        <th th:text="최종주소여부"></th>
+        <th th:text="신고일"></th>
+    </tr>
+    <tr th:each="address : ${addresses}">
+        <td th:text="${address.houseMovementAddress}"></td>
+        <td th:text="${address.lastAddressYn}"></td>
+        <td th:text="${address.Pk.houseMovementReportDate}"></td>
+    </tr>
+</table>
+<br />
+<table>
+    <tr>
+        <th th:text="세대주와의관계"></th>
+        <th th:text="이름"></th>
+        <th th:text="주민등록번호"></th>
+        <th th:text="신고일"></th>
+        <th th:text="변동사유"></th>
+    </tr>
+    <tr th:each="member : ${members}">
+        <td th:text="${member.householdRelationshipCode}"></td>
+        <td th:text="${member.name}"></td>
+        <td th:text="${member.residentRegistrationNumber}"></td>
+        <td th:text="${member.reportDate}"></td>
+        <td th:text="${member.householdCompositionChangeReasonCode}"></td>
+    </tr>
+</table>
+<a href="/">홈으로</a>
+</body>
+</html>

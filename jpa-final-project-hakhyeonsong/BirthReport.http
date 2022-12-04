@@ -1,0 +1,38 @@
+### 출생신고서 등록: POST /residents/{serialNumber}/birth
+### serialNumber는 행위자의 주민 일련번호
+### targetSerialNumber는 출생자의 주민 일련번호
+
+POST /residents/8/birth HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+{
+    "targetSerialNumber": 9,
+    "birthDeathReportDate": "2036-05-23T20:37:11",
+    "birthReportQualificationsCode": "father",
+    "emailAddress": "test@test.com",
+    "phoneNumber": "010-1234-5678",
+    "birthDate": "2036-05-23T20:37:11",
+    "birthPlaceCode": "병원"
+}
+
+### 출생 신고서 수정: PUT /residents/{serialNumber}/birth/{targetSerialNumber}
+
+PUT /residents/8/birth/9
+host: localhost:8080
+Content-Type: application/json
+
+{
+  "birthDeathReportDate": "2036-05-23T20:37:11",
+  "birthReportQualificationsCode": "father",
+  "emailAddress": "testedit@test.com",
+  "phoneNumber": "010-1234-5678",
+  "birthDate": "2036-05-23T20:37:11",
+  "birthPlaceCode": "병원"
+}
+
+### 출생 신고서 삭제: DELETE /residents/{serialNumber}/birth/{targetSerialNumber}
+
+DELETE /residents/8/birth/9
+host: localhost:8080
+Content-Type: application/json

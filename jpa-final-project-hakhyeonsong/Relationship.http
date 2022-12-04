@@ -1,0 +1,28 @@
+### 가족관계 등록: POST /residents/{serialNumber}/relationship
+### serialNumber는 기준 주민의 일련번호
+### familySerialNumber는 대상 가족의 주민 일련번호
+
+POST /residents/8/relationship HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+{
+    "familySerialNumber": 7,
+    "relationShip": "father"
+}
+
+### 가족관계 수정: PUT /residents/{serialNumber}/relationship/{familySerialNumber}
+
+PUT /residents/8/relationship/7
+host: localhost:8080
+Content-Type: application/json
+
+{
+  "relationShip": "mother"
+}
+
+### 가족관계 삭제: DELETE /residents/{serialNumber}/relationship/{familySerialNumber}
+
+DELETE /residents/8/relationship/7
+host: localhost:8080
+Content-Type: application/json

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주민관리 서비스 - By Ramos</title>
+</head>
+<body>
+<h1>주민 관리 서비스 메인 페이지</h1>
+<table>
+    <tr>
+        <th th:text="주민일련번호"></th>
+        <th th:text="이름"></th>
+        <th th:text="주민등록번호"></th>
+        <th th:text="성별"></th>
+        <th th:text="출생일"></th>
+        <th th:text="출생장소"></th>
+        <th th:text="등록기준지주소"></th>
+        <th th:text="사망일시"></th>
+        <th th:text="사망장소코드"></th>
+        <th th:text="사망장소주소"></th>
+        <th></th>
+    </tr>
+    <tr th:each="resident : ${residents}">
+        <td th:text="${resident.residentSerialNumber}"></td>
+        <td th:text="${resident.name}"></td>
+        <td th:text="${resident.residentRegistrationNumber}"></td>
+        <td th:text="${resident.genderCode}"></td>
+        <td th:text="${resident.birthDate}"></td>
+        <td th:text="${resident.birthPlaceCode}"></td>
+        <td th:text="${resident.registrationBaseAddress}"></td>
+        <td th:text="${resident.deathDate}"></td>
+        <td th:text="${resident.deathPlaceCode}"></td>
+        <td th:text="${resident.deathPlaceAddress}"></td>
+        <td th:text="상세보기" th:onclick="|location.href='@{/web/residents/{id}(id=${resident.residentSerialNumber})}'|"></td>
+    </tr>
+</table>
+
+<div th:with="totalPages = ${totalPages}" class="pagination">
+    <a th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:href="@{/(page=${pageNumber}-1)}"
+       th:text="${pageNumber} + ' '"></a>
+</div>
+</body>
+</html>

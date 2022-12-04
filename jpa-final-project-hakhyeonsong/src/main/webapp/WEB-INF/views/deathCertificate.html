@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주민관리 서비스 - By Ramos</title>
+</head>
+<body>
+<h1>사망신고서</h1>
+신고일: <span th:text="${certificate.reportDate}"></span>
+<table>
+    <tr>
+        <th th:text="사망자이름"></th>
+        <th th:text="사망자주민등록번호"></th>
+        <th th:text="사망일시"></th>
+        <th th:text="사망장소구분"></th>
+        <th th:text="사망주소"></th>
+    </tr>
+    <tr>
+        <td th:text="${certificate.targetName}"></td>
+        <td th:text="${certificate.targetResidentRegistrationNumber}"></td>
+        <td th:text="${certificate.deathDate}"></td>
+        <td th:text="${certificate.deathPlaceCode}"></td>
+        <td th:text="${certificate.deathPlaceAddress}"></td>
+    </tr>
+</table>
+<br />
+<table>
+    <tr>
+        <th th:text="신고인이름"></th>
+        <th th:text="주민등록번호"></th>
+        <th th:text="신고인자격"></th>
+        <th th:text="이메일"></th>
+        <th th:text="전화번호"></th>
+    </tr>
+    <tr>
+        <td th:text="${certificate.reporterName}"></td>
+        <td th:text="${certificate.reporterResidentRegistrationNumber}"></td>
+        <td th:text="${certificate.reportQualificationsCode}"></td>
+        <td th:text="${certificate.emailAddress}"></td>
+        <td th:text="${certificate.phoneNumber}"></td>
+    </tr>
+</table>
+<br />
+<a href="/">홈으로</a>
+</body>
+</html>

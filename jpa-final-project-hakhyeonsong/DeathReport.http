@@ -1,0 +1,40 @@
+### 사망 등록: POST /residents/{serialNumber}/death
+### serialNumber는 행위자의 주민 일련번호
+### targetSerialNumber는 출생자의 주민 일련번호
+
+POST /residents/7/death HTTP/1.1
+host: localhost:8080
+Content-Type: application/json
+
+{
+    "targetSerialNumber": 8,
+    "birthDeathReportDate": "2082-11-21T20:37:11",
+    "deathReportQualificationsCode": "housemate",
+    "emailAddress": "test@test.com",
+    "phoneNumber": "010-1234-5678",
+    "deathDate": "2082-11-21T20:37:11",
+    "deathPlaceCode": "주택",
+    "deathPlaceAddress": "미국 캘리포니아주 샌프란시스코"
+}
+
+### 사망 신고서 수정: PUT /residents/{serialNumber}/death/{targetSerialNumber}
+
+PUT /residents/7/death/8
+host: localhost:8080
+Content-Type: application/json
+
+{
+  "birthDeathReportDate": "2082-11-21T20:37:11",
+  "deathReportQualificationsCode": "non-living relatives",
+  "emailAddress": "testedit@test.com",
+  "phoneNumber": "010-1234-5678",
+  "deathDate": "2082-11-21T20:37:11",
+  "deathPlaceCode": "주택",
+  "deathPlaceAddress": "미국 캘리포니아주 샌프란시스코"
+}
+
+### 사망 신고서 삭제: DELETE /residents/{serialNumber}/death/{targetSerialNumber}
+
+DELETE /residents/7/death/8
+host: localhost:8080
+Content-Type: application/json

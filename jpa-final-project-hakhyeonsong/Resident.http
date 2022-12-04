@@ -1,0 +1,55 @@
+### 주민 등록: POST /residents
+
+POST /residents HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "residentSerialNumber": "8",
+  "name": "송학현",
+  "residentRegistrationNumber": "960119-3456789",
+  "genderCode": "남",
+  "birthDate": "1996-01-19T20:37:11",
+  "birthPlaceCode": "병원",
+  "registrationBaseAddress": "전남 화순군 화순읍 광덕로 202",
+  "deathDate": null,
+  "deathPlaceCode": null,
+  "deathPlaceAddress": null
+}
+
+### 샘플 등록 2
+POST /residents HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "residentSerialNumber": "9",
+  "name": "송중기",
+  "residentRegistrationNumber": "360523-3456789",
+  "genderCode": "남",
+  "birthDate": "2036-05-23T20:37:11",
+  "birthPlaceCode": "병원",
+  "registrationBaseAddress": "전남 화순군 화순읍 광덕로 202",
+  "deathDate": null,
+  "deathPlaceCode": null,
+  "deathPlaceAddress": null
+}
+
+### 주민 수정: PUT /residents/{serialNumber}
+
+PUT /residents/8 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "residentSerialNumber": "8",
+  "name": "송학현",
+  "residentRegistrationNumber": "960119-3456789",
+  "genderCode": "남",
+  "birthDate": "1996-01-19T20:37:11",
+  "birthPlaceCode": "병원",
+  "registrationBaseAddress": "미국 캘리포니아주 샌프란시스코",
+  "deathDate": null,
+  "deathPlaceCode": null,
+  "deathPlaceAddress": null
+}
